@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Models\ProjectManager;
+// use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class ProjectManagersController extends BaseController
 {
@@ -13,7 +16,11 @@ class ProjectManagersController extends BaseController
 	}
 
 	public function read($id){
-
-		return ProjectManager::findOrFail($id);
+        try {            
+            return ProjectManager::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 
+            ['message' => 'Project Manager not found']], 404);
+        }
 	}
 }
